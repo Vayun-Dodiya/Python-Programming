@@ -1,6 +1,10 @@
 
+"""
+Contact Management System
+Author: Vayun
+Description: A CRUD-based contact manager using record-markers and exception handling.
+"""
 
-#Function Def Part 
 def Features():
     while True:
         try:
@@ -12,11 +16,14 @@ def Features():
         except ValueError:
             print("Invalid input! Please enter a numeric digit.")
 
+
 def ConP(name = "Unknown",CNo = ""):
     str_To_print = f"\n->\nName : {name.capitalize()}\nContact Number : {CNo}\n"
     return str_To_print
-#EXecution Part 
+
+
 print("\t"*9 + " ===== Contact - Editor =====")
+
 
 while True:
 
@@ -27,7 +34,7 @@ while True:
     
         print("Printing The Contact ...")
     
-        with open("Contact-I-.txt") as f:
+        with open("Contact.txt") as f:
             Contact = f.read()
         print(Contact)
     
@@ -38,7 +45,7 @@ while True:
 
         if len(Number) != 10 or not(Number.isdigit()):
             print("Invalid Number !")
-            break
+            continue
 
         else:
 
@@ -49,38 +56,31 @@ while True:
 
     elif opera == 3: # Search For Contact
 
-        #The Process for Building This Features Is Pending / Not Started.
         line = None
         found = 0
         search = input("Enter The Name : ")
     
-        with open("Contact-I-.txt") as f:
-            line = f.readline()
-    
-            while line != "":
-    
-                if search.lower() in line.lower():
-                    print("\n----Contact Found----\n")
-                    found += 1
-    
-                if found == 1:
-                    print("=>\n    "+line , end="")
-                    line = f.readline()
-                    print("    "+line , end="")
-                    found = 0
-    
-                line = f.readline()
+        with open("Contact.txt") as f:
+            lines = f.readlines()
+
+        for i, line in enumerate(lines):
+            if search.lower() in line.lower():
+                print("\n----Contact Found----")
+                found = 1
+                print("=>\n    " + line, end="")
+                if i + 1 < len(lines):
+                    print("    " + lines[i + 1], end="")
+        if found == 0:print("Contact Not Found !")
+        else:pass
     
     elif opera == 4: # Edit Contact
         
-        #The Process for Building This Features Is Pending / Not Started.
-
         search = input("Enter The Contact Name or Number You Want TO Edit : ")
         
         if search.isdigit():
             i,NewContent,found = 0,[],0
 
-            with open("Contact-I-.txt") as f:
+            with open("Contact.txt") as f:
                 content = f.readlines()
             
             count = 0
@@ -105,7 +105,9 @@ while True:
                 else:Update_Contact = f"Name : {new_name.capitalize()}\nContact Number : {new_contact}\n"
             
                 edit= edit_Line.replace(edit_Line,Update_Contact)
-            
+            else:
+                print("Contact Not Found !")
+                continue
             index = 0
             
             for i in content:
@@ -119,18 +121,16 @@ while True:
                     NewContent.append(edit)
             
                 index += 1
-            # for i in NewContent:
-            #     print(i,end="")
-            with open("Contact-I-.txt","w") as f:
+
+            with open("Contact.txt","w") as f:
                 for i in NewContent:
                     f.write(i)
             
-            break
-
+            
         elif search.isalpha():
             NewContent = []
             count,found = 0,0
-            with open("Contact-I-.txt") as f:
+            with open("Contact.txt") as f:
                 content = f.readlines()
             
             for i in content:
@@ -165,66 +165,52 @@ while True:
                         NewContent.append(edit)
                 
                     index += 1
-                # for i in NewContent:
-                #     print(i,end="")
-                with open("Contact-I-.txt","w") as f:
+
+                with open("Contact.txt","w") as f:
                     for i in NewContent:
                         f.write(i)
             else:
                 print("Contact Not Found !")
-                break
+                continue
 
     elif opera == 5: # Remove The Contact 
-        #The Process for Building This Features Is Pending / Not Started.
+
         marker = "->\n"
-        with open("Contact-I-.txt") as f:
+        with open("Contact.txt") as f:
             content = f.readlines()
         
         search = input("Enter The Contact Name You Want TO Delete : ")
-        # print(content)
+
         index,found = 0,0
-        # for i in content:print(i,end="")
-        print(content)
-        for i in content :
+
+        found = False
+        for i in content:
             if search.lower() in i.lower():
-                # # found = 1
-                # content.pop(index-1)
-                # content.pop(index-1)
                 content_2 = content.copy()
+                found = True
                 break
             index += 1
+
+        if not found:
+            print("Contact Not Found!")
+            continue  # go back to menu
         
-        else:print("Contact Not Found !")
-
-        print(content_2)
-        # if content_2:
-        # Mark2In = content_2.index(marker,index)
-        # for i in range(index, Mark2In+1):content.pop(index-1)
-
         try:
-            # 1. Try to find the NEXT marker to see where the contact record ends
+
             Mark2In = content_2.index(marker, index)
             
-            # 2. If found, delete everything from the name up to that next marker
             for i in range(index, Mark2In + 1):
                 content.pop(index - 1)
 
         except ValueError:
-            # 3. If .index() fails, it means this was the LAST contact in the file!
-            # So we just delete everything from 'index' until the end of the list.
+
             print("Deleting the last contact in the list...")
             
-            # We delete from the line above the name (the marker) to the end
-            # while len(content) >= index-1:
-            #     # print(len(content))
-            #     content.pop(index - 2)
             content = content[:index-2]
 
-        with open("Contact-I-.txt","w") as f:
+        with open("Contact.txt","w") as f:
             for i in content:
                 f.write(i)
 
-        for i in content:print(i,end=".")
-        
     elif opera == 6: # Close The Execution
         break

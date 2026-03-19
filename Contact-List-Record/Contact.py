@@ -45,7 +45,7 @@ while True:
 
         if len(Number) != 10 or not(Number.isdigit()):
             print("Invalid Number !")
-            break
+            continue
 
         else:
 
@@ -109,7 +109,9 @@ while True:
                 else:Update_Contact = f"Name : {new_name.capitalize()}\nContact Number : {new_contact}\n"
             
                 edit= edit_Line.replace(edit_Line,Update_Contact)
-            
+            else:
+                print("Contact Not Found !")
+                continue
             index = 0
             
             for i in content:
@@ -128,8 +130,7 @@ while True:
                 for i in NewContent:
                     f.write(i)
             
-            break
-
+            
         elif search.isalpha():
             NewContent = []
             count,found = 0,0
@@ -174,7 +175,7 @@ while True:
                         f.write(i)
             else:
                 print("Contact Not Found !")
-                break
+                continue
 
     elif opera == 5: # Remove The Contact 
 
